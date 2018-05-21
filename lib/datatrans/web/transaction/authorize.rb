@@ -13,8 +13,8 @@ class Datatrans::Web::Transaction
     end
 
     def valid_signature?
-      # TODO: does not make sense... true if errors?
-      return true if errors_occurred? # no sign2 sent on error
+      # Only check for valid signature if sign2 param is present
+      return true unless sign2
       sign(self.datatrans.merchant_id, params[:amount], params[:currency], params[:uppTransactionId]) == params[:sign2]
     end
 
@@ -74,6 +74,9 @@ class Datatrans::Web::Transaction
       params[:errorDetail] rescue nil
     end
 
+    def sign2
+      params[:sign2] rescue nil
+    end
 
     private
 
